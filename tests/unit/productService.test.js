@@ -1,13 +1,15 @@
 import { jest } from "@jest/globals";
 
-jest.mock("../../models/Product.js", () => ({
-  create: jest.fn(),
-  find: jest.fn(),
-  findByIdAndDelete: jest.fn(),
+jest.unstable_mockModule("../../models/Product.js", () => ({
+  default: {
+    create: jest.fn(),
+    find: jest.fn(),
+    findByIdAndDelete: jest.fn(),
+  },
 }));
 
-import Product from "../../models/Product.js";
-import { createProduct, getAllProducts, deleteProduct } from "../../services/productService.js";
+const { default: Product } = await import("../../models/Product.js");
+const { createProduct, getAllProducts, deleteProduct } = await import("../../services/productService.js");
 
 describe("productService", () => {
 
