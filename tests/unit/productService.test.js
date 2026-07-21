@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals";
 
-jest.mock("../models/Product.js", () => ({
+jest.mock("../../models/Product.js", () => ({
   create: jest.fn(),
   find: jest.fn(),
   findByIdAndDelete: jest.fn(),
@@ -23,15 +23,11 @@ describe("productService", () => {
       expect(result).toEqual(fake);
     });
 
-    // TODO: write a test that catches Break 4 (error swallowed silently)
-    // Use Product.create.mockRejectedValue(new Error("DB error"))
-    // and assert the function rejects
     it("should throw when Product.create fails", async () => {
       Product.create.mockRejectedValue(new Error("DB error"));
       await expect(createProduct({ name: "Bad" })).rejects.toThrow("DB error");
     });
 
-    // Extra test to catch Break 2 (createProduct returns undefined)
     it("should not return undefined when product is created", async () => {
       const fake = { _id: "p1", name: "Phone", price: 999 };
       Product.create.mockResolvedValue(fake);
@@ -52,8 +48,6 @@ describe("productService", () => {
 
       const result = await getAllProducts();
 
-      // TODO: add an assertion here checking result.length equals 2
-      // This will catch Break 3
       expect(result).toEqual(fakeList);
       expect(result.length).toBe(2);
     });
@@ -72,9 +66,6 @@ describe("productService", () => {
       expect(result).toEqual({ deleted: true });
     });
 
-    // TODO: write a test that catches Break 1 (null check removed)
-    // Use Product.findByIdAndDelete.mockResolvedValue(null)
-    // and assert the function throws "Product not found"
     it("should throw 'Product not found' when product does not exist", async () => {
       Product.findByIdAndDelete.mockResolvedValue(null);
       await expect(deleteProduct("missingId")).rejects.toThrow("Product not found");
